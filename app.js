@@ -10,6 +10,7 @@ const courseRouter = require('./routes/courses');
 const paymentsRouter = require('./routes/payments');
 const ordersRouter = require('./routes/orders');
 const mediaRouter = require('./routes/media');
+const refreshTokenRouter = require('./routes/refreshTokens');
 
 var app = express();
 
@@ -19,12 +20,15 @@ app.use(express.urlencoded({ extended: false, limit : '50mb' }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const verifyToken = require('./middleware/verifyToken');
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/courses', courseRouter);
+app.use('/courses',verifyToken, courseRouter);
 app.use('/media', mediaRouter);
 app.use('/orders', ordersRouter);
 app.use('/payments', paymentsRouter);
+app.use('/refresh-tokens', refreshTokenRouter);
 
 
 
